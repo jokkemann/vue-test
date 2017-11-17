@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+	<script src="https://unpkg.com/vue"></script>
+</head>
+<body>
+	<div id="spinner">
+		<div id="app" v-if="hasResult">
+			{{ result.text }}
+		</div>
+		<ul>
+			<li v-for="option in options">{{ option.text }} <span v-on:click="removeOption(option)">[X]</span></li>
+		</ul>
+		<button v-bind:disabled="options.length < 2" v-on:click="spin(options)">Snurra</button>
+		<input type="text" v-model="newOption" v-on:keyup.enter="addOption">
+	</div>
+	<script type="text/javascript">
+		var app = new Vue({
+			el: '#spinner',
+			data: {
+				options: [
+					{
+						text: 'test'
+					},
+					{
+						text: 'test2'
+					}
+				],
+				addOption: function () {
+					console.log('dump', this.newOption)
+					
+					this.options.push({ text: this.newOption})
+					this.newOption = ''
+				},
+				removeOption: function (option) {
+					console.log('Removing', option)
+					var index = this.options.findIndex(opt => option.text === opt.text)
+					console.log(index)
+					this.options.splice(index, 1)
+				},
+				newOption: '',
+				spin: function (options) {
+					var rand = Math.floor(Math.random() * options.length);
+					console.log(rand)
+					var randomOption = options[rand]
+
+					this.setResult(randomOption)
+				},
+				hasResult: false,
+				result: null,
+				setResult: function (result) {
+					console.log('setResult', result)
+					this.hasResult = true
+					this.result = result
+				}
+			}
+		})
+	</script>
+</body>
+</html>
